@@ -15,7 +15,9 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        options: --health-cmd "mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+        options:
+          --health-cmd: "mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+  
 
       mongo-express:
         image: mongo-express:latest
