@@ -1,9 +1,9 @@
 package com.berkinozturk.event.entity;
 
 
-import com.berkinozturk.event.category.Category;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -21,7 +21,9 @@ public class EventEntity implements Serializable {
     private String eventName;
     private String eventLocation;
     private List<String> eventTags;
-    private Category eventCategory;
+
+    @DBRef
+    private CategoryEntity eventCategory;
 
 
 }
