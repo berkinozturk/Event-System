@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document
@@ -20,10 +21,12 @@ public class EventEntity implements Serializable {
     private String id;
     private String eventName;
     private String eventLocation;
+    private LocalDateTime eventDate;
+    private String eventOwner;
     private List<String> eventTags;
 
     @DBRef
-    private CategoryEntity eventCategory;
+    private TicketEntity eventTicketType;
 
 
 }

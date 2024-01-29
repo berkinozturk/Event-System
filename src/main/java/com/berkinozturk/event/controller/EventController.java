@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,8 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody EventEntity eventEntity) {
+    public ResponseEntity<String> saveEvent(@RequestBody EventEntity eventEntity) {
+        eventEntity.setEventDate(LocalDateTime.now());
         return ResponseEntity.ok(eventService.saveEvent(eventEntity));
     }
 

@@ -1,14 +1,17 @@
 package com.berkinozturk.event;
 
-import com.berkinozturk.event.entity.CategoryEntity;
 import com.berkinozturk.event.entity.EventEntity;
-import com.berkinozturk.event.repository.CategoryRepository;
+import com.berkinozturk.event.entity.TicketEntity;
 import com.berkinozturk.event.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.List;
+
+import static com.berkinozturk.event.entity.TicketType.VIP;
 
 @SpringBootApplication
 public class EventApplication {
@@ -18,23 +21,24 @@ public class EventApplication {
 	}
 
 	//@Bean
-	public CommandLineRunner commandLineRunner(@Autowired EventRepository eventRepository, CategoryRepository categoryRepository) {
+	public CommandLineRunner commandLineRunner(@Autowired EventRepository eventRepository ) {
 
 		return args -> {
 
-			CategoryEntity category = CategoryEntity.builder()
-					.categoryName("Spring Boot Category")
-					.categoryDescription("Spring Boot Category")
-					.build();
-
 			EventEntity event = EventEntity.builder()
 					.eventName("Spring Boot Event")
-					.eventLocation("Spring Boot Event")
+					.eventLocation("Istanbul")
+					.eventOwner("Berkin Öztürk")
+					.eventTags(List.of("Spring Boot", "Java", "MongoDB"))
+					.eventTicketType(TicketEntity.builder()
+							.ticketType(VIP)
+							.ticketPrice(100.0)
+							.ticketQuantity(2)
+							.build())
 					.build();
 
-			categoryRepository.insert(category);
+			eventRepository.insert(event);
 
-			//eventRepository.insert(event);
 		};
 	}
 

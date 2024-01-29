@@ -1,21 +1,23 @@
 package com.berkinozturk.event.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Data
 @AllArgsConstructor
-@Builder
+@Setter
+@Data
+@Getter
 @Document
-public class CategoryEntity implements Serializable {
+@Builder
+public class UserEntity implements Serializable{
 
     @Id
     private String id;
-    private String categoryName;
-    private String categoryDescription;
+    private String username;
+    private String password;
+    private String email;
+
 }
