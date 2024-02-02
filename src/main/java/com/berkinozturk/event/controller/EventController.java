@@ -4,6 +4,7 @@ import com.berkinozturk.event.entity.EventEntity;
 import com.berkinozturk.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class EventController {
         return ResponseEntity.ok(eventService.saveEvent(eventEntity));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<EventEntity>> findAll() {
         return ResponseEntity.ok(eventService.findAllEvents());

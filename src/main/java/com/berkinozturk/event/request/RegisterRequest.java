@@ -1,5 +1,6 @@
 package com.berkinozturk.event.request;
 
+import com.berkinozturk.event.entity.RoleType;
 import lombok.*;
 
 @Setter
@@ -14,5 +15,6 @@ public class RegisterRequest {
     private String password;
     private String email;
     private String fullName;
+    private RoleType role;
 
 }
