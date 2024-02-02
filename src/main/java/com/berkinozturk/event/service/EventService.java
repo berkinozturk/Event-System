@@ -29,4 +29,9 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public EventEntity updateEvent(String id, EventEntity updatedEvent) {
+        EventEntity existingEvent = findById(id);
+        return eventRepository.save(existingEvent);
+    }
+
 }
