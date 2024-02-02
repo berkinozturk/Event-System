@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userEntityRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        if (!hasAdminRole()) {
+        if (!hasAdminRole(user.getUsername())) {
             throw new UnauthorizedException("You are not authorized to create events");
         }
 
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         EventEntity eventData = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + eventId));
 
-        if (!hasAdminRole()) {
+        if (!hasAdminRole(user.getUsername())) {
             throw new UnauthorizedException("You are not authorized to edit events");
         }
 
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userEntityRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        if (!hasAdminRole()) {
+        if (!hasAdminRole(user.getUsername())) {
             throw new UnauthorizedException("You are not authorized to delete events");
         }
 
@@ -122,10 +122,9 @@ public class UserServiceImpl implements UserService {
         return currentUserId.equals(userId);
     }
 
-    private boolean hasAdminRole() {
-        //TODO: Implement JWT authentication
-
-        return true;
+    private boolean hasAdminRole(String username) {
+        Optional<UserEntity> user = userEntityRepository.findByUsername(username);
+        return user.map(userEntity -> userEntity.getRole() == RoleType.ADMIN).orElse(false);
     }
 
 
