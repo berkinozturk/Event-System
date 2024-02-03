@@ -23,8 +23,9 @@ public class EventController {
         return ResponseEntity.ok(eventService.saveEvent(eventEntity));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EventEntity>> findAll() {
         return ResponseEntity.ok(eventService.findAllEvents());
     }
