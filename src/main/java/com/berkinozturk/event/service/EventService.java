@@ -46,7 +46,7 @@ public class EventService {
         eventRepository.save(eventEntity);
     }
     @CacheEvict(value = "events", key = "#eventId")
-    public void updateEventAdmin(String userId, String eventId, EventEntity event) {
+    public void updateEvent(String userId, String eventId, EventEntity event) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
         EventEntity eventData = eventRepository.findById(eventId)
@@ -68,7 +68,7 @@ public class EventService {
     }
 
     @CacheEvict(value = "events", key = "#id")
-    public void deleteEventAdmin(String userId, String eventId) {
+    public void deleteEvent(String userId, String eventId) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 

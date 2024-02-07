@@ -42,7 +42,7 @@ public class EventController {
     public ResponseEntity<EventEntity> updateEventAdmin(@PathVariable String eventId,
                                                         @RequestBody EventEntity event,
                                                         @RequestHeader("Authorization") String userId) {
-        eventService.updateEventAdmin(userId, eventId, event);
+        eventService.updateEvent(userId, eventId, event);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -50,7 +50,7 @@ public class EventController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteEventAdmin(@PathVariable String eventId,
                                                  @RequestHeader("Authorization") String userId) {
-        eventService.deleteEventAdmin(userId, eventId);
+        eventService.deleteEvent(userId, eventId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
