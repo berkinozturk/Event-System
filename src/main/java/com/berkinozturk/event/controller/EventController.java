@@ -3,6 +3,7 @@ package com.berkinozturk.event.controller;
 import com.berkinozturk.event.entity.EventEntity;
 import com.berkinozturk.event.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,6 @@ public class EventController {
 
     private final EventService eventService;
 
-    @PostMapping
-    public ResponseEntity<String> saveEvent(@RequestBody EventEntity eventEntity) {
-        eventEntity.setEventDate(LocalDateTime.now());
-        return ResponseEntity.ok(eventService.saveEvent(eventEntity));
-    }
-
-
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EventEntity>> findAll() {
@@ -35,14 +29,29 @@ public class EventController {
         return ResponseEntity.ok(eventService.findById(id));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") String id) {
-        eventService.deleteEvent(id);
-        return ResponseEntity.accepted().build();
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<EventEntity> createEvent(@RequestBody EventEntity eventEntity,
+                                                   @RequestHeader("Authorization") String userId) {
+        eventService.createEvent(userId, eventEntity);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public EventEntity updateEvent(@PathVariable String id, @RequestBody EventEntity updatedEvent) {
-        return eventService.updateEvent(id, updatedEvent);
+    @PutMapping("/update/{eventId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<EventEntity> updateEventAdmin(@PathVariable String eventId,
+                                                        @RequestBody EventEntity event,
+                                                        @RequestHeader("Authorization") String userId) {
+        eventService.updateEventAdmin(userId, eventId, event);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{eventId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteEventAdmin(@PathVariable String eventId,
+                                                 @RequestHeader("Authorization") String userId) {
+        eventService.deleteEventAdmin(userId, eventId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
