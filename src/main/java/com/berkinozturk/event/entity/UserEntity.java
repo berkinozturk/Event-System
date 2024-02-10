@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @Document
 @Builder
+@NoArgsConstructor
 public class UserEntity implements UserDetails {
 
     @Id

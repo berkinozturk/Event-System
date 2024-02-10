@@ -51,10 +51,6 @@ public class UserService {
         UserEntity user = userEntityRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        if (!isCurrentUser(userId)) {
-            throw new UnauthorizedException("You are not authorized to update this user's profile");
-        }
-
         user.setFullName(fullName);
         user.setEmail(email);
         return userEntityRepository.save(user);

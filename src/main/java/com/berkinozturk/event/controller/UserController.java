@@ -35,12 +35,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("isAuthenticated() && (#id == principal.userId)")
     public ResponseEntity<UserEntity> updateProfile(@PathVariable("id") String id, @RequestBody UpdateUserRequest request) {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!currentUserId.equals(id)) {
-            throw new UnauthorizedException("You are not authorized to update this user's profile");
-        }
+
         return ResponseEntity.ok(userService.updateProfile(id, request.getFullName(), request.getEmail()));
     }
 
