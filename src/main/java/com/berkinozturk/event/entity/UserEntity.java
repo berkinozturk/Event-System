@@ -18,7 +18,7 @@ import java.util.List;
 @Document
 @Builder
 @NoArgsConstructor
-public class UserEntity implements UserDetails {
+public class UserEntity implements UserDetails, Serializable{
 
     @Id
     private String id;

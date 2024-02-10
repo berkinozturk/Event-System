@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class EventEntity {
+public class EventEntity implements Serializable{
     @Id
     private String id;
     private String eventName;
