@@ -35,48 +35,32 @@ public class EventService {
     }
 
     @CacheEvict(value = "events", allEntries = true)
-    public void createEvent(String userId, EventEntity eventEntity) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-        if (!hasAdminRole(user.getUsername())) {
-            throw new UnauthorizedException("You are not authorized to create events");
-        }
+    public void createEvent(EventEntity eventEntity) {
 
         eventRepository.save(eventEntity);
     }
-    @CacheEvict(value = "events", key = "#eventId")
-    public void updateEvent(String userId, String eventId, EventEntity event) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-        EventEntity eventData = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + eventId));
+    @CacheEvict(value = "events", key = "#id")
+    public void updateEvent(String id, EventEntity updatedEvent) {
 
-        if (!hasAdminRole(user.getUsername())) {
-            throw new UnauthorizedException("You are not authorized to edit events");
-        }
+        EventEntity eventData = eventRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + id));
 
-        event.setEventName(eventData.getEventName());
-        event.setEventLocation(eventData.getEventLocation());
-        event.setEventDate(eventData.getEventDate());
-        event.setEventOwner(eventData.getEventOwner());
-        event.setEventTags(eventData.getEventTags());
-        event.setEventTicketType(eventData.getEventTicketType());
 
-        eventRepository.save(event);
+
+        eventData.setEventName(updatedEvent.getEventName());
+        eventData.setEventLocation(updatedEvent.getEventLocation());
+        eventData.setEventDate(updatedEvent.getEventDate());
+        eventData.setEventOwner(updatedEvent.getEventOwner());
+        eventData.setEventTags(updatedEvent.getEventTags());
+        eventData.setEventTicketType(updatedEvent.getEventTicketType());
+
+        eventRepository.save(eventData);
 
     }
 
     @CacheEvict(value = "events", key = "#id")
-    public void deleteEvent(String userId, String eventId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-        if (!hasAdminRole(user.getUsername())) {
-            throw new UnauthorizedException("You are not authorized to delete events");
-        }
-
-        eventRepository.deleteById(eventId);
+    public void deleteEvent(String id) {
+        eventRepository.deleteById(id);
     }
 
     private boolean hasAdminRole(String username) {

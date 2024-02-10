@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class EventEntity implements Serializable {
+public class EventEntity {
     @Id
     private String id;
     private String eventName;

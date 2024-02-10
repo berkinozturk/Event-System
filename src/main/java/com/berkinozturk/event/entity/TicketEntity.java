@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Document
 @Builder
-public class TicketEntity implements Serializable {
+public class TicketEntity {
 
         @Id
         private String id;
