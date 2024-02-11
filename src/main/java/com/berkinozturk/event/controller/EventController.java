@@ -1,17 +1,14 @@
 package com.berkinozturk.event.controller;
 
 import com.berkinozturk.event.entity.EventEntity;
-import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,8 +18,6 @@ public class EventController {
 
     @Autowired
     private final EventService eventService;
-    @Autowired
-    private EventRepository eventRepository;
 
     @GetMapping
     public ResponseEntity<List<EventEntity>> findAll() {

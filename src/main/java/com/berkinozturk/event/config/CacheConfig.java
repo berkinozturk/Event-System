@@ -31,8 +31,8 @@ public class CacheConfig {
     public RedisCacheManager cacheManager() {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager
                 .builder(redisConnectionFactory)
-                .withCacheConfiguration("PostCache", cacheConfiguration())
-                .withCacheConfiguration("WriterCache", cacheConfiguration());
+                .withCacheConfiguration("users", cacheConfiguration())
+                .withCacheConfiguration("events", cacheConfiguration());
 
         return builder.build();
     }

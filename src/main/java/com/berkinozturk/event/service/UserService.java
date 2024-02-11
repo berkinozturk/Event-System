@@ -3,14 +3,11 @@ package com.berkinozturk.event.service;
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
-import com.berkinozturk.event.exception.UnauthorizedException;
-import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -44,15 +41,6 @@ public class UserService {
         return userEntityRepository.findByUsername(username);
     }
 
-
-    public void addRoleToUser(String userId, RoleType role) {
-        UserEntity user = userEntityRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-        user.setRole(role);
-        userEntityRepository.save(user);
-    }
-
     @CachePut(value = "users", key = "#userId")
     public UserEntity updateProfile(String userId, String fullName, String email) {
         UserEntity user = userEntityRepository.findById(userId)
@@ -70,10 +58,6 @@ public class UserService {
         userEntityRepository.deleteById(userId);
     }
 
-    private boolean isCurrentUser(String userId) {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return currentUserId.equals(userId);
-    }
 
 
 

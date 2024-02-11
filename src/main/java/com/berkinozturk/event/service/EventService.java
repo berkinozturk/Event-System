@@ -4,12 +4,9 @@ import com.berkinozturk.event.entity.EventEntity;
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
-import com.berkinozturk.event.exception.UnauthorizedException;
 import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
@@ -25,12 +22,11 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    private static final Logger logger = LoggerFactory.getLogger(EventService.class);
+
 
 
     @Cacheable(value = "events", key = "#id")
     public EventEntity findById(String id) {
-        logger.info("Cache is used for findById method with id: {}", id);
         return eventRepository.findById(id).orElse(null);
     }
 
@@ -41,7 +37,6 @@ public class EventService {
 
     @CacheEvict(value = "events", allEntries = true)
     public void createEvent(EventEntity eventEntity) {
-
         eventRepository.save(eventEntity);
     }
     @CacheEvict(value = "events", key = "#id")
@@ -60,16 +55,11 @@ public class EventService {
         eventRepository.save(eventData);
 
     }
-
     @CacheEvict(value = "events", key = "#id")
     public void deleteEvent(String id) {
         eventRepository.deleteById(id);
     }
 
-    private boolean hasAdminRole(String username) {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
-        return user.map(userEntity -> userEntity.getRole() == RoleType.ADMIN).orElse(false);
-    }
 
 
 

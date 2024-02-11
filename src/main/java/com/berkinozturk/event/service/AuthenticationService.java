@@ -1,7 +1,6 @@
 package com.berkinozturk.event.service;
 
 import com.berkinozturk.event.config.JwtService;
-import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.request.AuthenticationRequest;
@@ -39,7 +38,6 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);

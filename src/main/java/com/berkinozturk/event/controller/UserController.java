@@ -2,13 +2,10 @@ package com.berkinozturk.event.controller;
 
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
-import com.berkinozturk.event.exception.UnauthorizedException;
 import com.berkinozturk.event.request.UpdateUserRequest;
 import com.berkinozturk.event.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
