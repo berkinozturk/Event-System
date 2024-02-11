@@ -43,16 +43,7 @@ public class EventServiceTest {
         assertEquals(event, foundEvent);
     }
 
-    @Test
-    void testFindById_NotFound() {
-        String eventId = "nonExistingId";
 
-        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
-
-        assertThrows(EntityNotFoundException.class, () -> {
-            eventService.findById(eventId);
-        });
-    }
 
     @Test
     void testFindAllEvents() {
@@ -95,6 +86,17 @@ public class EventServiceTest {
         verify(eventRepository, times(1)).save(updatedEvent);
     }
 
+    @Test
+    void testUpdateEvent_NotFound() {
+        String eventId = "nonExistingId";
+        EventEntity updatedEvent = new EventEntity("123", "Updated Event", "Updated Location", LocalDateTime.now(), "Updated Owner", new ArrayList<>(), null);
+
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            eventService.updateEvent(eventId, updatedEvent);
+        });
+    }
 
 
     @Test

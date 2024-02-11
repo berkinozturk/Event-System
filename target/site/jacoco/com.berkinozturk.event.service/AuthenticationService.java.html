@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthenticationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">event</a> &gt; <a href="index.source.html" class="el_package">com.berkinozturk.event.service</a> &gt; <span class="el_source">AuthenticationService.java</span></div><h1>AuthenticationService.java</h1><pre class="source lang-java linenums">package com.berkinozturk.event.service;
+
+import com.berkinozturk.event.config.JwtService;
+import com.berkinozturk.event.entity.UserEntity;
+import com.berkinozturk.event.repository.UserRepository;
+import com.berkinozturk.event.request.AuthenticationRequest;
+import com.berkinozturk.event.request.RegisterRequest;
+import com.berkinozturk.event.response.AuthenticationResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L15">@RequiredArgsConstructor</span>
+public class AuthenticationService {
+
+
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthenticationResponse register(RegisterRequest request) {
+<span class="nc" id="L24">        var user = UserEntity.builder()</span>
+<span class="nc" id="L25">                .username(request.getUsername())</span>
+<span class="nc" id="L26">                .password(request.getPassword())</span>
+<span class="nc" id="L27">                .email(request.getEmail())</span>
+<span class="nc" id="L28">                .fullName(request.getFullName())</span>
+<span class="nc" id="L29">                .role(request.getRole())</span>
+<span class="nc" id="L30">                .build();</span>
+<span class="nc" id="L31">        userRepository.save(user);</span>
+
+<span class="nc" id="L33">        var jwtToken = jwtService.generateToken(user);</span>
+<span class="nc" id="L34">        return AuthenticationResponse.builder()</span>
+<span class="nc" id="L35">                .token(jwtToken)</span>
+<span class="nc" id="L36">                .build();</span>
+
+    }
+
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+<span class="nc" id="L41">        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));</span>
+<span class="nc" id="L42">        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();</span>
+<span class="nc" id="L43">        var jwtToken = jwtService.generateToken(user);</span>
+<span class="nc" id="L44">        return AuthenticationResponse.builder()</span>
+<span class="nc" id="L45">                .token(jwtToken)</span>
+<span class="nc" id="L46">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

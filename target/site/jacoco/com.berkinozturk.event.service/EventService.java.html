@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">event</a> &gt; <a href="index.source.html" class="el_package">com.berkinozturk.event.service</a> &gt; <span class="el_source">EventService.java</span></div><h1>EventService.java</h1><pre class="source lang-java linenums">package com.berkinozturk.event.service;
+
+import com.berkinozturk.event.entity.EventEntity;
+import com.berkinozturk.event.exception.EntityNotFoundException;
+import com.berkinozturk.event.repository.EventRepository;
+import com.berkinozturk.event.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="fc" id="L16">@RequiredArgsConstructor</span>
+@EnableCaching
+public class EventService {
+
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+
+    @Cacheable(value = &quot;events&quot;, key = &quot;#id&quot;)
+    public EventEntity findById(String id) {
+<span class="fc" id="L25">        return eventRepository.findById(id).orElse(null);</span>
+    }
+
+    @Cacheable(value = &quot;allEvents&quot;, key=&quot;'all'&quot;)
+    public List&lt;EventEntity&gt; findAllEvents() {
+<span class="fc" id="L30">        return eventRepository.findAll();</span>
+    }
+
+    @CacheEvict(value = &quot;events&quot;, allEntries = true)
+    public void createEvent(EventEntity eventEntity) {
+<span class="fc" id="L35">        eventRepository.save(eventEntity);</span>
+<span class="fc" id="L36">    }</span>
+    @CacheEvict(value = &quot;events&quot;, key = &quot;#id&quot;)
+    public void updateEvent(String id, EventEntity updatedEvent) {
+
+<span class="fc" id="L40">        EventEntity eventData = eventRepository.findById(id)</span>
+<span class="fc" id="L41">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Event not found with id: &quot; + id));</span>
+
+
+<span class="fc" id="L44">        eventData.setEventName(updatedEvent.getEventName());</span>
+<span class="fc" id="L45">        eventData.setEventLocation(updatedEvent.getEventLocation());</span>
+<span class="fc" id="L46">        eventData.setEventDate(updatedEvent.getEventDate());</span>
+<span class="fc" id="L47">        eventData.setEventOwner(updatedEvent.getEventOwner());</span>
+<span class="fc" id="L48">        eventData.setEventTags(updatedEvent.getEventTags());</span>
+<span class="fc" id="L49">        eventData.setEventTicketType(updatedEvent.getEventTicketType());</span>
+
+<span class="fc" id="L51">        eventRepository.save(eventData);</span>
+
+<span class="fc" id="L53">    }</span>
+    @CacheEvict(value = &quot;events&quot;, key = &quot;#id&quot;)
+    public void deleteEvent(String id) {
+<span class="fc" id="L56">        eventRepository.deleteById(id);</span>
+<span class="fc" id="L57">    }</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
