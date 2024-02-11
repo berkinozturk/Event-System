@@ -1,7 +1,6 @@
 package com.berkinozturk.event.controller;
 
 import com.berkinozturk.event.entity.EventEntity;
-import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

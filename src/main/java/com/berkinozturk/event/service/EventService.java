@@ -1,8 +1,6 @@
 package com.berkinozturk.event.service;
 
 import com.berkinozturk.event.entity.EventEntity;
-import com.berkinozturk.event.entity.RoleType;
-import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.repository.UserRepository;
@@ -13,7 +11,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +19,6 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-
-
 
     @Cacheable(value = "events", key = "#id")
     public EventEntity findById(String id) {
@@ -44,6 +39,7 @@ public class EventService {
 
         EventEntity eventData = eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + id));
+
 
         eventData.setEventName(updatedEvent.getEventName());
         eventData.setEventLocation(updatedEvent.getEventLocation());
