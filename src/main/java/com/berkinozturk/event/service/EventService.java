@@ -8,6 +8,8 @@ import com.berkinozturk.event.exception.UnauthorizedException;
 import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
@@ -23,13 +25,16 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(EventService.class);
+
 
     @Cacheable(value = "events", key = "#id")
     public EventEntity findById(String id) {
+        logger.info("Cache is used for findById method with id: {}", id);
         return eventRepository.findById(id).orElse(null);
     }
 
-    @Cacheable(value = "allEvents")
+    @Cacheable(value = "allEvents", key="'all'")
     public List<EventEntity> findAllEvents() {
         return eventRepository.findAll();
     }
@@ -44,8 +49,6 @@ public class EventService {
 
         EventEntity eventData = eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + id));
-
-
 
         eventData.setEventName(updatedEvent.getEventName());
         eventData.setEventLocation(updatedEvent.getEventLocation());
