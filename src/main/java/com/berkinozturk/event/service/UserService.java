@@ -50,6 +50,7 @@ public class UserService {
         user.setEmail(email);
         return userEntityRepository.save(user);
     }
+
     @CacheEvict(value = "users", key = "#userId")
     public void deleteUser(String userId) {
         userEntityRepository.findById(userId)
@@ -57,9 +58,6 @@ public class UserService {
 
         userEntityRepository.deleteById(userId);
     }
-
-
-
 
 
 }
