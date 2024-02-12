@@ -19,28 +19,28 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity&lt;UserEntity&gt; createUser(@RequestBody UserEntity user) {
-<span class="nc" id="L22">        return ResponseEntity.ok(userService.createUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), user.getRole()));</span>
+<span class="fc" id="L22">        return ResponseEntity.ok(userService.createUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), user.getRole()));</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;UserEntity&gt; getUserById(@PathVariable(&quot;id&quot;) String id) {
-<span class="nc" id="L27">        Optional&lt;UserEntity&gt; user = userService.findUserById(id);</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (!user.isPresent()) {</span>
-<span class="nc" id="L29">            throw new EntityNotFoundException(&quot;User not found with ID: &quot; + id);</span>
+<span class="fc" id="L27">        Optional&lt;UserEntity&gt; user = userService.findUserById(id);</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (!user.isPresent()) {</span>
+<span class="fc" id="L29">            throw new EntityNotFoundException(&quot;User not found with ID: &quot; + id);</span>
         }
-<span class="nc" id="L31">        return ResponseEntity.ok(user.get());</span>
+<span class="fc" id="L31">        return ResponseEntity.ok(user.get());</span>
     }
 
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;UserEntity&gt; updateProfile(@PathVariable(&quot;id&quot;) String id, @RequestBody UpdateUserRequest request) {
 
-<span class="nc" id="L37">        return ResponseEntity.ok(userService.updateProfile(id, request.getFullName(), request.getEmail()));</span>
+<span class="fc" id="L37">        return ResponseEntity.ok(userService.updateProfile(id, request.getFullName(), request.getEmail()));</span>
     }
 
     @DeleteMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable(&quot;id&quot;) String id) {
-<span class="nc" id="L42">        userService.deleteUser(id);</span>
-<span class="nc" id="L43">        return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L42">        userService.deleteUser(id);</span>
+<span class="fc" id="L43">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

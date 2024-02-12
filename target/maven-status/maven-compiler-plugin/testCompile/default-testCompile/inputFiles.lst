@@ -1,3 +1,5 @@
 /Users/berkinozturk/Desktop/Event-System/src/test/java/com/berkinozturk/event/EventApplicationTests.java
 /Users/berkinozturk/Desktop/Event-System/src/test/java/com/berkinozturk/event/controller/EventControllerTest.java
 /Users/berkinozturk/Desktop/Event-System/src/test/java/com/berkinozturk/event/service/EventServiceTest.java
+/Users/berkinozturk/Desktop/Event-System/src/test/java/com/berkinozturk/event/controller/UserControllerTest.java
+/Users/berkinozturk/Desktop/Event-System/src/test/java/com/berkinozturk/event/service/UserServiceTest.java

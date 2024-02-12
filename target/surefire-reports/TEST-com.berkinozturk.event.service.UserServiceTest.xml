@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.berkinozturk.event.controller.EventControllerTest" time="0.202" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.berkinozturk.event.service.UserServiceTest" time="0.519" tests="7" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -28,6 +28,8 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
+    <property name="java.awt.headless" value="true"/>
     <property name="surefire.real.class.path" value="/Users/berkinozturk/Desktop/Event-System/target/surefire/surefirebooter-20240212194945705_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.6+9-LTS-190"/>
@@ -45,6 +47,8 @@
     <property name="user.dir" value="/Users/berkinozturk/Desktop/Event-System"/>
     <property name="os.arch" value="x86_64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="PID" value="22679"/>
+    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <property name="native.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/Users/berkinozturk/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
@@ -53,9 +57,11 @@
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testDeleteEvent" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.157"/>
-  <testcase name="testUpdateEvent" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.007"/>
-  <testcase name="testFindAll" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.004"/>
-  <testcase name="testCreateEvent" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.004"/>
-  <testcase name="testFindById" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.007"/>
+  <testcase name="deleteUser_InvalidId_ThrowsEntityNotFoundException" classname="com.berkinozturk.event.service.UserServiceTest" time="0.466"/>
+  <testcase name="updateProfile_ValidId_ReturnsUpdatedUserEntity" classname="com.berkinozturk.event.service.UserServiceTest" time="0.008"/>
+  <testcase name="findUserById_InvalidId_ReturnsEmptyOptional" classname="com.berkinozturk.event.service.UserServiceTest" time="0.015"/>
+  <testcase name="findUserById_ValidId_ReturnsUserEntity" classname="com.berkinozturk.event.service.UserServiceTest" time="0.003"/>
+  <testcase name="deleteUser_ValidId_DeletesUserEntity" classname="com.berkinozturk.event.service.UserServiceTest" time="0.003"/>
+  <testcase name="updateProfile_InvalidId_ThrowsEntityNotFoundException" classname="com.berkinozturk.event.service.UserServiceTest" time="0.008"/>
+  <testcase name="createUser_ValidUser_ReturnsUserEntity" classname="com.berkinozturk.event.service.UserServiceTest" time="0.003"/>
 </testsuite>

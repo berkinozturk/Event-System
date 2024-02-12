@@ -1,3 +1,5 @@
+com/berkinozturk/event/service/UserServiceTest.class
+com/berkinozturk/event/controller/UserControllerTest.class
+com/berkinozturk/event/EventApplicationTests.class
 com/berkinozturk/event/controller/EventControllerTest.class
 com/berkinozturk/event/service/EventServiceTest.class
-com/berkinozturk/event/EventApplicationTests.class

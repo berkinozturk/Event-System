@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.berkinozturk.event.controller.EventControllerTest" time="0.202" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.berkinozturk.event.controller.UserControllerTest" time="2.69" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,9 +53,9 @@
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testDeleteEvent" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.157"/>
-  <testcase name="testUpdateEvent" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.007"/>
-  <testcase name="testFindAll" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.004"/>
-  <testcase name="testCreateEvent" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.004"/>
-  <testcase name="testFindById" classname="com.berkinozturk.event.controller.EventControllerTest" time="0.007"/>
+  <testcase name="updateProfile_ValidId_ReturnsUpdatedUserEntity" classname="com.berkinozturk.event.controller.UserControllerTest" time="2.49"/>
+  <testcase name="deleteUser_ValidId_ReturnsNoContent" classname="com.berkinozturk.event.controller.UserControllerTest" time="0.04"/>
+  <testcase name="getUserById_ValidId_ReturnsUserEntity" classname="com.berkinozturk.event.controller.UserControllerTest" time="0.01"/>
+  <testcase name="getUserById_InvalidId_ThrowsEntityNotFoundException" classname="com.berkinozturk.event.controller.UserControllerTest" time="0.011"/>
+  <testcase name="createUser_ValidUser_ReturnsUserEntity" classname="com.berkinozturk.event.controller.UserControllerTest" time="0.01"/>
 </testsuite>
