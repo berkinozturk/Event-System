@@ -156,3 +156,10 @@
 
 
 I hope this helps! Feel free to ask any further questions you may have.
+
+## Sample Images
+
+![Authorization](images/auth.png)
+![Retrieving all events](images/events.png)
+![Creating User](images/user_create.png)
+
