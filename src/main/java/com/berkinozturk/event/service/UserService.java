@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserRepository userEntityRepository;
 
-    
+
     public UserEntity createUser(String username, String password, String email, String fullName, RoleType role) {
         UserEntity user = UserEntity.builder()
                 .username(username)
@@ -31,12 +31,12 @@ public class UserService {
         return userEntityRepository.save(user);
     }
 
-    @CachePut(value = "users", key = "#result.id")
+
     public Optional<UserEntity> findUserById(String userId) {
         return userEntityRepository.findById(userId);
     }
 
-    @Cacheable(value = "users", key = "#username")
+
     public Optional<UserEntity> findUserByUsername(String username) {
         return userEntityRepository.findByUsername(username);
     }
