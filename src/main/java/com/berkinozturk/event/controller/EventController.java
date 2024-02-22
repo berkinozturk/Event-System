@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
 public class EventController {
+    // More or less same comments as in UserController
 
     @Autowired
     private final EventService eventService;

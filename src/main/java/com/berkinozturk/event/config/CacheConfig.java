@@ -22,6 +22,8 @@ public class CacheConfig {
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
+                // In real systems, you'd probably want to set different TTL for different cache entries.
+                // It's less likely that you see the config set here in real projects.
                 .entryTtl(Duration.ofSeconds(20))
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));

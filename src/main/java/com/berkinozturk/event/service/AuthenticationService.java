@@ -21,6 +21,11 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        // Mapping request object which is an input from an external world to an internal is a good practice.
+        // Can be improved with a Mapper class with a mapper function. Why?
+        // Because you can write tests for that mapping function and.
+        // You guarantee that these string values are always passed to the correct field.
+        // For instance, if I set username to the password field what's stopping me now?
         var user = UserEntity.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
@@ -28,9 +33,11 @@ public class AuthenticationService {
                 .fullName(request.getFullName())
                 .role(request.getRole())
                 .build();
-        userRepository.save(user);
 
+        // What if creating a user is successful but generating a token fails, what happens?
+        userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -39,6 +46,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        // Throws what?
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

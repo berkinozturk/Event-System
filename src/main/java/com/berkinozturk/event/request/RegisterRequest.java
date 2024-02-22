@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-
+    // You can add validation to these.
     private String username;
     private String password;
     private String email;

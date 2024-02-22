@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserRequest {
-
+    // You can add validation to these.
     private String fullName;
     private String email;
 
