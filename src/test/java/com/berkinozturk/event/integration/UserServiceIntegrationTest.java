@@ -24,6 +24,14 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
+// Integration test is where you put together all the components you use and test a certain flow(s).
+// It's good that we're actually using the database and the caching solution we have but this does not guarantee
+// That the system will work as expected.
+// The application is Restful API therefore, you need to boot your Spring application and then, send requests like:
+// One scenario: First authenticate and then, create event, update event, get events and then, delete events.
+// Another one is: Try to make requests to the protected endpoints without authenticating.
+// Make sure that your authentication solution covers those.
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
 @Import(UserService.class)

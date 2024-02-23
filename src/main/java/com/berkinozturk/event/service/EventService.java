@@ -20,6 +20,8 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
+    // I am not sure but does caching even work here?
+    // How do you know that the value is fetched from Redis if it is in Redis before you fetch it from the database?
     @Cacheable(value = "events", key = "#id")
     public EventEntity findById(String id) {
         return eventRepository.findById(id).orElse(null);
