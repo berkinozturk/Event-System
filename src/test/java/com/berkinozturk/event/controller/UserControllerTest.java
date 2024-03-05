@@ -4,6 +4,7 @@ import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.request.UpdateUserRequest;
+import com.berkinozturk.event.response.CreateUserResponse;
 import com.berkinozturk.event.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,16 +38,19 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser_ValidUser_ReturnsUserEntity() {
-        // Given
-        when(userService.createUser(anyString(), anyString(), anyString(), anyString(), any())).thenReturn(userEntity);
+    void testCreateUser() {
+        UserEntity userEntity = new UserEntity("1", "username", "password", "email@example.com", "Full Name", RoleType.USER);
+        when(userService.createUser(userEntity.getUsername(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getFullName(), userEntity.getRole()))
+                .thenReturn(userEntity);
 
-        // When
-        ResponseEntity<UserEntity> response = userController.createUser(userEntity);
+        ResponseEntity<CreateUserResponse> responseEntity = userController.createUser(userEntity);
 
-        // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(userEntity, response.getBody());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(userEntity.getId(), responseEntity.getBody().getId());
+        assertEquals(userEntity.getUsername(), responseEntity.getBody().getUsername());
+        assertEquals(userEntity.getEmail(), responseEntity.getBody().getEmail());
+        assertEquals(userEntity.getFullName(), responseEntity.getBody().getFullName());
+        assertEquals(userEntity.getRole(), responseEntity.getBody().getRole());
     }
 
     @Test

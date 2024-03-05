@@ -18,25 +18,24 @@ import java.time.Duration;
 public class CacheConfig {
 
     private final RedisConnectionFactory redisConnectionFactory;
+    private static final Duration USERS_CACHE_TTL = Duration.ofMinutes(10);
+    private static final Duration EVENTS_CACHE_TTL = Duration.ofSeconds(20);
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
-                // In real systems, you'd probably want to set different TTL for different cache entries.
-                // It's less likely that you see the config set here in real projects.
-                .entryTtl(Duration.ofSeconds(20))
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 
     @Bean
     public RedisCacheManager cacheManager() {
-        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager
-                .builder(redisConnectionFactory)
-                .withCacheConfiguration("users", cacheConfiguration())
-                .withCacheConfiguration("events", cacheConfiguration());
+        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory);
+
+        // Configure cache entries with different TTLs
+        builder.withCacheConfiguration("users", cacheConfiguration().entryTtl(USERS_CACHE_TTL));
+        builder.withCacheConfiguration("events", cacheConfiguration().entryTtl(EVENTS_CACHE_TTL));
 
         return builder.build();
     }
-
 }

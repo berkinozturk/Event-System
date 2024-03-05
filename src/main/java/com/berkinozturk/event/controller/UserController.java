@@ -3,6 +3,7 @@ package com.berkinozturk.event.controller;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.request.UpdateUserRequest;
+import com.berkinozturk.event.response.CreateUserResponse;
 import com.berkinozturk.event.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,12 @@ public class UserController {
     // Moreover, this controller here is specific to the Restful API and that is not part of our business logic.
     // Today it is synchronous and might be asynchronous tomorrow and, you poll from Kafka. You'd ideally want things separated.
     // Your business logic components such as entities ideally should not come up to this level. Try to keep them at service level.
+
     @PostMapping
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        return ResponseEntity.ok(userService.createUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), user.getRole()));
+    public ResponseEntity<CreateUserResponse> createUser(@RequestBody UserEntity user) {
+        UserEntity createdUser = userService.createUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), user.getRole());
+        CreateUserResponse response = mapToCreateUserResponse(createdUser);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -46,5 +50,9 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private CreateUserResponse mapToCreateUserResponse(UserEntity userEntity) {
+        return new CreateUserResponse(userEntity.getId(), userEntity.getUsername(), userEntity.getEmail(), userEntity.getFullName(), userEntity.getRole());
     }
 }
