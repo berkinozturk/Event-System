@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class JwtService {
 
 
-    String secretKey = System.getenv("SECRET_KEY");
+    private static final String SECRET_KEY = "50cd36946119ce8dc40e4306b2ac2ae96dfd642d00e98377d69b695b151c33fa";
 
     private static final Long ONE_YEAR_IN_MILLISECONDS = 1000 * 60 * 60 * 24 * 365L;
 
@@ -70,7 +70,7 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

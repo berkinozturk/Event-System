@@ -2,10 +2,12 @@ package com.berkinozturk.event.service;
 
 import com.berkinozturk.event.config.JwtService;
 import com.berkinozturk.event.entity.UserEntity;
+import com.berkinozturk.event.exception.UserNotFoundException;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.request.AuthenticationRequest;
 import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.response.AuthenticationResponse;
+import com.berkinozturk.event.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,40 +17,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        // Mapping request object which is an input from an external world to an internal is a good practice.
-        // Can be improved with a Mapper class with a mapper function. Why?
-        // Because you can write tests for that mapping function and.
-        // You guarantee that these string values are always passed to the correct field.
-        // For instance, if I set username to the password field what's stopping me now?
-        var user = UserEntity.builder()
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .email(request.getEmail())
-                .fullName(request.getFullName())
-                .role(request.getRole())
-                .build();
-
-        // What if creating a user is successful but generating a token fails, what happens?
+        UserEntity user = userMapper.toUserEntity(request);
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
-
+        try {
+            String jwtToken = jwtService.generateToken(user);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception ex) {
+            throw new RuntimeException("Token generation failed: " + ex.getMessage());
+        }
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        // Throws what?
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        // The problem with auth is here, bad credentials
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        } catch (Exception ex) {
+            throw new RuntimeException("Authentication failed: " + ex.getMessage());
+        }
+        UserEntity user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
