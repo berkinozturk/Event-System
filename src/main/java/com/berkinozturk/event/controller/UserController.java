@@ -2,6 +2,7 @@ package com.berkinozturk.event.controller;
 
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
+import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.request.UpdateUserRequest;
 import com.berkinozturk.event.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,9 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
     @PostMapping
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
-        return ResponseEntity.ok(userService.createUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), user.getRole()));
+    public ResponseEntity<UserEntity> createUser(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(userService.createUser(request));
     }
 
     @GetMapping("/{id}")
@@ -42,4 +42,6 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
