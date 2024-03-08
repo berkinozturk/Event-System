@@ -3,7 +3,9 @@ package com.berkinozturk.event.service;
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
+import com.berkinozturk.event.mapper.UserMapper;
 import com.berkinozturk.event.repository.UserRepository;
+import com.berkinozturk.event.request.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -17,23 +19,15 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userEntityRepository;
+    private final UserMapper userMapper;
 
 
-    public UserEntity createUser(String username, String password, String email, String fullName, RoleType role) {
-        // Same as I commented in AuthenticationService.
-        UserEntity user = UserEntity.builder()
-                .username(username)
-                .password(password)
-                .email(email)
-                .fullName(fullName)
-                .role(role)
-                .build();
+    public UserEntity createUser(RegisterRequest request) {
 
+        UserEntity user = userMapper.toUserEntity(request);
         return userEntityRepository.save(user);
     }
 
-
-    // Great practice that you use Optional for read queries.
     public Optional<UserEntity> findUserById(String userId) {
         return userEntityRepository.findById(userId);
     }

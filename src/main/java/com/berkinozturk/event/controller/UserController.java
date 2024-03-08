@@ -2,8 +2,8 @@ package com.berkinozturk.event.controller;
 
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
+import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.request.UpdateUserRequest;
-import com.berkinozturk.event.response.CreateUserResponse;
 import com.berkinozturk.event.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +25,8 @@ public class UserController {
     // Your business logic components such as entities ideally should not come up to this level. Try to keep them at service level.
 
     @PostMapping
-    public ResponseEntity<CreateUserResponse> createUser(@RequestBody UserEntity user) {
-        UserEntity createdUser = userService.createUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), user.getRole());
-        CreateUserResponse response = mapToCreateUserResponse(createdUser);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<UserEntity> createUser(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(userService.createUser(request));
     }
 
     @GetMapping("/{id}")
@@ -52,7 +50,5 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    private CreateUserResponse mapToCreateUserResponse(UserEntity userEntity) {
-        return new CreateUserResponse(userEntity.getId(), userEntity.getUsername(), userEntity.getEmail(), userEntity.getFullName(), userEntity.getRole());
-    }
+
 }
