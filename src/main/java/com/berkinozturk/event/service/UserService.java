@@ -38,6 +38,9 @@ public class UserService {
     }
 
     // Where do you set the user to the cache?
+    // ANSWER ==>
+    // Actually I set the cache only in here and deleteUser methods, because other methods are not returning the user object.
+    // Caching can be deleted from here and delete method.
     @CachePut(value = "users", key = "#userId")
     public UserEntity updateProfile(String userId, String fullName, String email) {
         UserEntity user = userEntityRepository.findById(userId)

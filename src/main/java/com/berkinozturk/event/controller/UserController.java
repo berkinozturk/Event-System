@@ -17,13 +17,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
-    // UserEntity is something you want to write own internal business logic around. You do not want to send that to the user.
-    // Write a CreateUserResponse and then, write a mapper that maps UserEntity to CreateUserResponse and then, use it in here. Also write test for that mapping functionality.
-    // Moreover, this controller here is specific to the Restful API and that is not part of our business logic.
-    // Today it is synchronous and might be asynchronous tomorrow and, you poll from Kafka. You'd ideally want things separated.
-    // Your business logic components such as entities ideally should not come up to this level. Try to keep them at service level.
-
     @PostMapping
     public ResponseEntity<UserEntity> createUser(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.createUser(request));
