@@ -4,6 +4,7 @@ import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.request.UpdateUserRequest;
+import com.berkinozturk.event.response.CreateUserResponse;
 import com.berkinozturk.event.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,9 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+
     @PostMapping("/create")
-    public ResponseEntity<UserEntity> createUser(@RequestBody RegisterRequest request) {
+    public ResponseEntity<CreateUserResponse> createUser(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
@@ -33,7 +35,6 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserEntity> updateProfile(@PathVariable("id") String id, @RequestBody UpdateUserRequest request) {
-
         return ResponseEntity.ok(userService.updateProfile(id, request.getFullName(), request.getEmail()));
     }
 

@@ -1,20 +1,21 @@
 package com.berkinozturk.event.service;
 
-import com.berkinozturk.event.entity.RoleType;
+import com.berkinozturk.event.config.SecurityConfig;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
-import com.berkinozturk.event.mapper.UserMapper;
+import com.berkinozturk.event.mapper.RegisterRequestToUserMapper;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.request.RegisterRequest;
+import com.berkinozturk.event.response.CreateUserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 
@@ -34,7 +35,10 @@ class UserServiceTest {
     private UserEntity userEntity;
 
     @Mock
-    private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private RegisterRequestToUserMapper registerRequestToUserMapper;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +46,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_ValidUser_ReturnsUserEntity() {
+    void createUser_ValidUser_ReturnsCreateUserResponse() {
         // Given
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setUsername("username");
@@ -51,22 +55,28 @@ class UserServiceTest {
         registerRequest.setFullName("Full Name");
         registerRequest.setRole(USER);
 
-        UserEntity expectedUserEntity = new UserEntity();
-        expectedUserEntity.setId("1"); // assuming user id is set after creation
-        expectedUserEntity.setUsername("username");
-        expectedUserEntity.setEmail("email@example.com");
-        expectedUserEntity.setFullName("Full Name");
-        expectedUserEntity.setRole(USER);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId("1"); // assuming user id is set after creation
+        userEntity.setUsername("username");
+        userEntity.setEmail("email@example.com");
+        userEntity.setFullName("Full Name");
+        userEntity.setRole(USER);
 
-        when(userMapper.toUserEntity(any(RegisterRequest.class))).thenReturn(expectedUserEntity);
-        when(userRepository.save(any(UserEntity.class))).thenReturn(expectedUserEntity);
+        CreateUserResponse expectedResponse = new CreateUserResponse("1","username","email@example.com","Full Name", USER);
+
+        when(registerRequestToUserMapper.toUserEntity(any(RegisterRequest.class))).thenReturn(userEntity);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
         // When
-        UserEntity createdUser = userService.createUser(registerRequest);
+        CreateUserResponse createdUser = userService.createUser(registerRequest);
 
         // Then
-        assertEquals(expectedUserEntity, createdUser);
+        assertEquals(expectedResponse.getId(), createdUser.getId());
+        assertEquals(expectedResponse.getFullName(), createdUser.getFullName());
+        assertEquals(expectedResponse.getEmail(), createdUser.getEmail());
+        assertEquals(expectedResponse.getRole(), createdUser.getRole());
     }
+
 
 
     @Test

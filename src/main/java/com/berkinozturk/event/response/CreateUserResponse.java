@@ -9,8 +9,8 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 public class CreateUserResponse {
-    private String id;
     private String username;
+    private String password;
     private String email;
     private String fullName;
     private RoleType role;

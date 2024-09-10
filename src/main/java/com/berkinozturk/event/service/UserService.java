@@ -3,13 +3,13 @@ package com.berkinozturk.event.service;
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
-import com.berkinozturk.event.mapper.UserMapper;
+import com.berkinozturk.event.mapper.RegisterRequestToUserMapper;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.request.RegisterRequest;
+import com.berkinozturk.event.response.CreateUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +20,26 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userEntityRepository;
-    private final UserMapper userMapper;
+    private final RegisterRequestToUserMapper registerRequestToUserMapper;
     private final PasswordEncoder passwordEncoder;
 
 
-    public UserEntity createUser(RegisterRequest request) {
-        UserEntity user = userMapper.toUserEntity(request);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userEntityRepository.save(user);
+
+    public CreateUserResponse createUser(RegisterRequest request) {
+        try {
+            UserEntity user = registerRequestToUserMapper.toUserEntity(request);
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                throw new IllegalArgumentException("Password cannot be null or empty");
+            }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userEntityRepository.save(user);
+
+            return new CreateUserResponse(user.getUsername(), user.getPassword(), user.getEmail(), user.getFullName(), RoleType.USER);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create user", e);
+        }
     }
+
 
     public Optional<UserEntity> findUserById(String userId) {
         return userEntityRepository.findById(userId);

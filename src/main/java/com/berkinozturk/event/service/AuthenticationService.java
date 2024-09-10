@@ -7,7 +7,7 @@ import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.request.AuthenticationRequest;
 import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.response.AuthenticationResponse;
-import com.berkinozturk.event.mapper.UserMapper;
+import com.berkinozturk.event.mapper.RegisterRequestToUserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,10 +21,10 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final UserMapper userMapper;
+    private final RegisterRequestToUserMapper registerRequestToUserMapper;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        UserEntity user = userMapper.toUserEntity(request);
+        UserEntity user = registerRequestToUserMapper.toUserEntity(request);
         userRepository.save(user);
         try {
             String jwtToken = jwtService.generateToken(user);

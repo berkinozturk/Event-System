@@ -52,7 +52,7 @@ class UserControllerTest {
         registerRequest.setFullName("Test User");
         registerRequest.setRole(USER);
 
-        UserEntity createdUser = new UserEntity();
+        CreateUserResponse createdUser = new CreateUserResponse();
         createdUser.setId("1");
         createdUser.setUsername("testuser");
         createdUser.setEmail("test@example.com");
@@ -62,7 +62,7 @@ class UserControllerTest {
         Mockito.when(userServiceMock.createUser(Mockito.any(RegisterRequest.class))).thenReturn(createdUser);
 
         // Act
-        ResponseEntity<UserEntity> response = userController.createUser(registerRequest);
+        ResponseEntity<CreateUserResponse> response = userController.createUser(registerRequest);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());

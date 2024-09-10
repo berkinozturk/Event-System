@@ -5,7 +5,7 @@ import com.berkinozturk.event.request.RegisterRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper {
+public class RegisterRequestToUserMapper {
 
     public UserEntity toUserEntity(RegisterRequest request) {
         return UserEntity.builder()
