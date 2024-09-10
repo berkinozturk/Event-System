@@ -6,6 +6,7 @@ import com.berkinozturk.event.response.AuthenticationResponse;
 import com.berkinozturk.event.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
 
@@ -27,6 +29,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request) {
 
+        log.info("Authentication request received: " + request.getUsername());
         return ResponseEntity.ok(authenticationService.authenticate(request));
 
     }

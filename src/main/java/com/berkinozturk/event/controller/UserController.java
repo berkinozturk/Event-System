@@ -17,7 +17,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<UserEntity> createUser(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(userService.createUser(request));
     }

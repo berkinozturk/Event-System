@@ -13,9 +13,10 @@ import lombok.*;
 @AllArgsConstructor
 public class AuthenticationRequest {
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    private String email;
+
+    @NotBlank(message = "Username is required")
+    @Size(min = 4, message = "Username must be at least 4 characters long")
+    private String username;
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")

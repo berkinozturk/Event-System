@@ -10,6 +10,7 @@ import com.berkinozturk.event.response.AuthenticationResponse;
 import com.berkinozturk.event.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -36,17 +37,18 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        // The problem with auth is here, bad credentials
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        } catch (Exception ex) {
-            throw new RuntimeException("Authentication failed: " + ex.getMessage());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        } catch (BadCredentialsException ex) {
+            throw new RuntimeException("Invalid credentials: Bad credentials", ex);
         }
-        UserEntity user = userRepository.findByEmail(request.getEmail())
+        UserEntity user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
+
+
 }

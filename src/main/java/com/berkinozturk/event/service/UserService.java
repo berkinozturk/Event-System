@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,11 +21,12 @@ public class UserService {
 
     private final UserRepository userEntityRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserEntity createUser(RegisterRequest request) {
-
         UserEntity user = userMapper.toUserEntity(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userEntityRepository.save(user);
     }
 
@@ -58,6 +60,7 @@ public class UserService {
 
         userEntityRepository.deleteById(userId);
     }
+
 
 
 }
