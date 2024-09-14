@@ -2,6 +2,7 @@ package com.berkinozturk.event.integration;
 
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
+import com.berkinozturk.event.mapper.RegisterRequestToUserMapper;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -10,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -33,7 +36,7 @@ import static org.mockito.Mockito.when;
 // Another one is: Try to make requests to the protected endpoints without authenticating.
 // Make sure that your authentication solution covers those.
 @ExtendWith(SpringExtension.class)
-@DataMongoTest
+@SpringBootTest
 @Import(UserService.class)
 @EnableCaching
 public class UserServiceIntegrationTest {
@@ -46,6 +49,8 @@ public class UserServiceIntegrationTest {
 
     @Autowired
     private CacheManager cacheManager;
+
+
 
     @BeforeEach
     public void setUp() {

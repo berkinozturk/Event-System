@@ -53,7 +53,6 @@ class UserControllerTest {
         registerRequest.setRole(USER);
 
         CreateUserResponse createdUser = new CreateUserResponse();
-        createdUser.setId("1");
         createdUser.setUsername("testuser");
         createdUser.setEmail("test@example.com");
         createdUser.setFullName("Test User");

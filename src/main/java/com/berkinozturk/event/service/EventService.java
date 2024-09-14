@@ -4,6 +4,7 @@ import com.berkinozturk.event.entity.EventEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.repository.UserRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

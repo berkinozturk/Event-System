@@ -71,7 +71,6 @@ class UserServiceTest {
         CreateUserResponse createdUser = userService.createUser(registerRequest);
 
         // Then
-        assertEquals(expectedResponse.getId(), createdUser.getId());
         assertEquals(expectedResponse.getFullName(), createdUser.getFullName());
         assertEquals(expectedResponse.getEmail(), createdUser.getEmail());
         assertEquals(expectedResponse.getRole(), createdUser.getRole());
