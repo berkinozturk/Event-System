@@ -2,6 +2,7 @@ package com.berkinozturk.event.integration;
 
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
+import com.berkinozturk.event.mapper.RegisterRequestToUserMapper;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -10,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -24,8 +27,16 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
+// Integration test is where you put together all the components you use and test a certain flow(s).
+// It's good that we're actually using the database and the caching solution we have but this does not guarantee
+// That the system will work as expected.
+// The application is Restful API therefore, you need to boot your Spring application and then, send requests like:
+// One scenario: First authenticate and then, create event, update event, get events and then, delete events.
+// Another one is: Try to make requests to the protected endpoints without authenticating.
+// Make sure that your authentication solution covers those.
 @ExtendWith(SpringExtension.class)
-@DataMongoTest
+@SpringBootTest
 @Import(UserService.class)
 @EnableCaching
 public class UserServiceIntegrationTest {
@@ -38,6 +49,8 @@ public class UserServiceIntegrationTest {
 
     @Autowired
     private CacheManager cacheManager;
+
+
 
     @BeforeEach
     public void setUp() {

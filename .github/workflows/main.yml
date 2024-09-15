@@ -12,8 +12,8 @@ jobs:
       mongodb:
         image: mongo:latest
         ports:
-          - 27017:27017   
-  
+          - 27017:27017
+
 
       mongo-express:
         image: mongo-express:latest
@@ -24,24 +24,15 @@ jobs:
           ME_CONFIG_MONGODB_PORT: 27017
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '17'
-        
-    - name: Set environment variable
-      run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
 
-    - name: Build with Maven
-      run: mvn -B clean install
-      env:
-        API_KEY: ${{ secrets.API_KEY }}
+      - name: Build with Maven
+        run: mvn -B clean install
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
 
-    - name: Run tests with Maven
-      run: mvn test
-
+      - name: Run tests with Maven
+        run: mvn test
 

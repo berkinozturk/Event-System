@@ -3,19 +3,23 @@ package com.berkinozturk.event.controller;
 import com.berkinozturk.event.entity.RoleType;
 import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
+import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.request.UpdateUserRequest;
+import com.berkinozturk.event.response.CreateUserResponse;
 import com.berkinozturk.event.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
+import static com.berkinozturk.event.entity.RoleType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -33,20 +37,35 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userEntity = new UserEntity("1", "username", "password", "email@example.com", "Full Name", RoleType.USER);
+        userEntity = new UserEntity("1", "username", "password", "email@example.com", "Full Name", USER);
     }
 
     @Test
-    void createUser_ValidUser_ReturnsUserEntity() {
-        // Given
-        when(userService.createUser(anyString(), anyString(), anyString(), anyString(), any())).thenReturn(userEntity);
+    void createUser_ReturnsCreatedUser() {
+        // Arrange
+        UserService userServiceMock = Mockito.mock(UserService.class);
+        UserController userController = new UserController(userServiceMock);
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setUsername("testuser");
+        registerRequest.setPassword("testpassword");
+        registerRequest.setEmail("test@example.com");
+        registerRequest.setFullName("Test User");
+        registerRequest.setRole(USER);
 
-        // When
-        ResponseEntity<UserEntity> response = userController.createUser(userEntity);
+        CreateUserResponse createdUser = new CreateUserResponse();
+        createdUser.setUsername("testuser");
+        createdUser.setEmail("test@example.com");
+        createdUser.setFullName("Test User");
+        createdUser.setRole(USER);
 
-        // Then
+        Mockito.when(userServiceMock.createUser(Mockito.any(RegisterRequest.class))).thenReturn(createdUser);
+
+        // Act
+        ResponseEntity<CreateUserResponse> response = userController.createUser(registerRequest);
+
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(userEntity, response.getBody());
+        assertEquals(createdUser, response.getBody());
     }
 
     @Test
