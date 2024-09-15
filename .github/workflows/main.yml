@@ -32,6 +32,9 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '17'
+        
+    - name: Set environment variable
+      run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
 
     - name: Build with Maven
       run: mvn -B clean install
