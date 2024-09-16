@@ -56,13 +56,13 @@ class UserServiceTest {
         registerRequest.setRole(USER);
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setId("1"); // assuming user id is set after creation
         userEntity.setUsername("username");
+        userEntity.setPassword("password");
         userEntity.setEmail("email@example.com");
         userEntity.setFullName("Full Name");
         userEntity.setRole(USER);
 
-        CreateUserResponse expectedResponse = new CreateUserResponse("1","username","email@example.com","Full Name", USER);
+        CreateUserResponse expectedResponse = new CreateUserResponse("username","password","email@example.com","Full Name", USER);
 
         when(registerRequestToUserMapper.toUserEntity(any(RegisterRequest.class))).thenReturn(userEntity);
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
