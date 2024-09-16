@@ -25,9 +25,10 @@ public class EventIntegrationTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+
     @Test
     public void testAuthenticateAndCreateEvent() {
-        AuthenticationRequest authRequest = new AuthenticationRequest("testtest", "testtest");
+        AuthenticationRequest authRequest = new AuthenticationRequest("username", "password");
         AuthenticationResponse authResponse = authService.authenticate(authRequest);
 
         String token = authResponse.getToken();
