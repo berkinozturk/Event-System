@@ -50,8 +50,6 @@ public class UserServiceIntegrationTest {
     @Autowired
     private CacheManager cacheManager;
 
-
-
     @BeforeEach
     public void setUp() {
         UserEntity user = new UserEntity("1", "testuser", "password", "test@example.com", "Test User", RoleType.USER);
