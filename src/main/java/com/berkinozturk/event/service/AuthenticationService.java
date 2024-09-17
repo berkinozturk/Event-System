@@ -25,6 +25,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RegisterRequestToUserMapper registerRequestToUserMapper;
 
+    // you can delete this method
     public AuthenticationResponse register(RegisterRequest request) {
         UserEntity user = registerRequestToUserMapper.toUserEntity(request);
         userRepository.save(user);
