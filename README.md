@@ -18,7 +18,7 @@
   <li><strong>controller:</strong> REST controllers managing events and users.</li>
   <li><strong>entity:</strong> Data models for events and users.</li>
   <li><strong>service:</strong> Business logic for event and user management.</li>
-  <li><strong>config:</strong> Configuration files for JWT and other services.</li>
+  <li><strong>config:</strong> Configuration files for JWT, Redis caching, and other services.</li>
   <li><strong>docker:</strong> Dockerfile and docker-compose.yml for building and running the application.</li>
   <li><strong>tests:</strong> Unit tests for controllers and services.</li>
 </ul>
@@ -37,14 +37,14 @@
   <tr>
     <td>GET /api/v1/events</td>
     <td>Retrieve a list of all events.</td>
-    <td>Public</td>
-    <td>None</td>
+    <td>Required</td>
+    <td>Admin</td>
   </tr>
   <tr>
     <td>GET /api/v1/events/{id}</td>
     <td>Obtain an event by its ID.</td>
-    <td>Public</td>
-    <td>None</td>
+    <td>Required</td>
+    <td>Admin</td>
   </tr>
   <tr>
     <td>POST /api/v1/events/create</td>
@@ -76,7 +76,7 @@
     <th>Role</th>
   </tr>
   <tr>
-    <td>POST /api/v1/users</td>
+    <td>POST /api/v1/users/create</td>
     <td>Register a new user.</td>
     <td>Public</td>
     <td>None</td>
@@ -110,17 +110,12 @@
     <th>Authentication</th>
     <th>Role</th>
   </tr>
-  <tr>
-    <td>POST /api/v1/auth/register</td>
-    <td>Register a new user.</td>
-    <td>Public</td>
-    <td>None</td>
-  </tr>
+
   <tr>
     <td>POST /api/v1/auth/authenticate</td>
     <td>Authenticate a user and receive a JWT token.</td>
     <td>Public</td>
-    <td>None</td>
+    <td>User</td>
   </tr>
 </table>
 
