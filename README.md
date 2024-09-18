@@ -159,5 +159,5 @@ I hope this helps! Feel free to ask any further questions you may have.
 ![Retrieving all events](images/events.png)
 ![Create event](images/createEvent.png)
 ![Update Event](images/update_event.png)
-![Creating User](images/user_create.png)
+![Creating User](images/userCreate.png)
 
