@@ -3,7 +3,7 @@ package com.berkinozturk.event.request;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Getter
 @Setter

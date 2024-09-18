@@ -2,9 +2,11 @@ package com.berkinozturk.event.service;
 
 import com.berkinozturk.event.entity.EventEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
+import com.berkinozturk.event.mapper.CreateRequestToEventMapper;
 import com.berkinozturk.event.repository.EventRepository;
 import com.berkinozturk.event.repository.UserRepository;
-import lombok.NoArgsConstructor;
+import com.berkinozturk.event.request.EventCreateRequest;
+import com.berkinozturk.event.response.EventCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -39,26 +41,30 @@ public class EventService {
     }
 
     @CacheEvict(value = "events", allEntries = true)
-    public void createEvent(EventEntity eventEntity) {
-        eventRepository.save(eventEntity);
+    public EventCreateResponse createEvent(EventCreateRequest request) {
+        try {
+            EventEntity event = CreateRequestToEventMapper.toEventEntity(request);
+            if (event.getEventName() == null || event.getEventName().isEmpty()) {
+                throw new IllegalArgumentException("Event name cannot be null or empty");
+            }
+            eventRepository.save(event);
+
+            return new EventCreateResponse(event.getId(), event.getEventName(), event.getEventLocation(), event.getEventOwner(), event.getEventDate());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create event", e);
+        }
     }
     @CacheEvict(value = "events", key = "#id")
-    public void updateEvent(String id, EventEntity updatedEvent) {
+    public EventEntity updateEvent(String id, String eventName, String eventLocation) {
 
-        EventEntity eventData = eventRepository.findById(id)
+        EventEntity event = eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + id));
 
-
-        eventData.setEventName(updatedEvent.getEventName());
-        eventData.setEventLocation(updatedEvent.getEventLocation());
-        eventData.setEventDate(updatedEvent.getEventDate());
-        eventData.setEventOwner(updatedEvent.getEventOwner());
-        eventData.setEventTags(updatedEvent.getEventTags());
-        eventData.setEventTicketType(updatedEvent.getEventTicketType());
-
-        eventRepository.save(eventData);
-
+        event.setEventName(eventName);
+        event.setEventLocation(eventLocation);
+        return eventRepository.save(event);
     }
+
     @CacheEvict(value = "events", key = "#id")
     public void deleteEvent(String id) {
         eventRepository.deleteById(id);

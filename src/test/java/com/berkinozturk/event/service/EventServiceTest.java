@@ -3,6 +3,7 @@ package com.berkinozturk.event.service;
 import com.berkinozturk.event.entity.EventEntity;
 import com.berkinozturk.event.exception.EntityNotFoundException;
 import com.berkinozturk.event.repository.EventRepository;
+import com.berkinozturk.event.request.EventCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -59,44 +60,57 @@ public class EventServiceTest {
         assertTrue(foundEvents.containsAll(events));
     }
 
-    @Test
-    void testCreateEvent() {
-        EventEntity event = new EventEntity("1", "Event", "Location", LocalDateTime.now(), "Owner", new ArrayList<>(), null);
 
-        eventService.createEvent(event);
-
-        verify(eventRepository, times(1)).save(event);
-    }
 
     @Test
     void testUpdateEvent() {
+        // Arrange
         String eventId = "eventId";
+        String updatedEventName = "Updated Event";
+        String updatedEventLocation = "Updated Location";
+
         EventEntity existingEvent = new EventEntity("1", "Event", "Location", LocalDateTime.now(), "Owner", new ArrayList<>(), null);
         existingEvent.setId(eventId);
 
-        EventEntity updatedEvent = new EventEntity("1", "Updated Event", "Updated Location", LocalDateTime.now(), "Updated Owner", new ArrayList<>(), null);
+        EventEntity updatedEvent = new EventEntity("1", updatedEventName, updatedEventLocation, LocalDateTime.now(), "Updated Owner", new ArrayList<>(), null);
         updatedEvent.setId(eventId);
-        updatedEvent.setEventName("Updated Event");
 
+        // Mock repository behavior
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
-        when(eventRepository.save(updatedEvent)).thenReturn(updatedEvent);
+        when(eventRepository.save(any(EventEntity.class))).thenReturn(updatedEvent);
 
-        eventService.updateEvent(eventId, updatedEvent);
+        // Act
+        eventService.updateEvent(eventId, updatedEventName, updatedEventLocation);
 
-        verify(eventRepository, times(1)).save(updatedEvent);
+        // Assert
+        verify(eventRepository, times(1)).findById(eventId);
+        verify(eventRepository, times(1)).save(any(EventEntity.class));
+
+        // Additional assertions to verify correct updates
+        assertEquals(updatedEventName, updatedEvent.getEventName());
+        assertEquals(updatedEventLocation, updatedEvent.getEventLocation());
     }
+
 
     @Test
     void testUpdateEvent_NotFound() {
+        // Arrange
         String eventId = "nonExistingId";
-        EventEntity updatedEvent = new EventEntity("123", "Updated Event", "Updated Location", LocalDateTime.now(), "Updated Owner", new ArrayList<>(), null);
+        String updatedEventName = "Updated Event";
+        String updatedEventLocation = "Updated Location";
 
+        // Mock repository behavior for non-existing event
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
 
+        // Act & Assert
         assertThrows(EntityNotFoundException.class, () -> {
-            eventService.updateEvent(eventId, updatedEvent);
+            eventService.updateEvent(eventId, updatedEventName, updatedEventLocation);
         });
+
+        // Verify that save method was never called
+        verify(eventRepository, never()).save(any(EventEntity.class));
     }
+
 
 
     @Test

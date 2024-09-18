@@ -24,7 +24,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-
     public CreateUserResponse createUser(RegisterRequest request) {
         try {
             UserEntity user = registerRequestToUserMapper.toUserEntity(request);

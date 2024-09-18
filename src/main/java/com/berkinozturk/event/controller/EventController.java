@@ -1,6 +1,8 @@
 package com.berkinozturk.event.controller;
 
 import com.berkinozturk.event.entity.EventEntity;
+import com.berkinozturk.event.request.EventCreateRequest;
+import com.berkinozturk.event.request.EventUpdateRequest;
 import com.berkinozturk.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import java.util.List;
 @RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
 public class EventController {
-    // More or less same comments as in UserController
 
     @Autowired
     private final EventService eventService;
@@ -30,15 +31,16 @@ public class EventController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EventEntity> createEvent(@RequestBody EventEntity eventEntity) {
+    public ResponseEntity<EventEntity> createEvent(@RequestBody EventCreateRequest eventEntity) {
         eventService.createEvent(eventEntity);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<EventEntity> updateEvent(@PathVariable String id, @RequestBody EventEntity event) {
-        eventService.updateEvent(id, event);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<EventEntity> updateEvent(@PathVariable String id, @RequestBody EventUpdateRequest request) {
+
+        return ResponseEntity.ok(eventService.updateEvent(id, request.getEventName(), request.getEventLocation()));
+
     }
 
     @DeleteMapping("/delete/{id}")

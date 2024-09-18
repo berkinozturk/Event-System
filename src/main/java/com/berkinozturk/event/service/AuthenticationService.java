@@ -5,7 +5,6 @@ import com.berkinozturk.event.entity.UserEntity;
 import com.berkinozturk.event.exception.UserNotFoundException;
 import com.berkinozturk.event.repository.UserRepository;
 import com.berkinozturk.event.request.AuthenticationRequest;
-import com.berkinozturk.event.request.RegisterRequest;
 import com.berkinozturk.event.response.AuthenticationResponse;
 import com.berkinozturk.event.mapper.RegisterRequestToUserMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +24,6 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RegisterRequestToUserMapper registerRequestToUserMapper;
 
-    // you can delete this method
-    public AuthenticationResponse register(RegisterRequest request) {
-        UserEntity user = registerRequestToUserMapper.toUserEntity(request);
-        userRepository.save(user);
-        try {
-            String jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponse.builder()
-                    .token(jwtToken)
-                    .build();
-        } catch (Exception ex) {
-            throw new RuntimeException("Token generation failed: " + ex.getMessage());
-        }
-    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {

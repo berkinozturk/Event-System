@@ -1,6 +1,6 @@
 package com.berkinozturk.event.request;
 
-import jakarta.validation.constraints.Email;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;

@@ -1,5 +1,8 @@
 package com.berkinozturk.event.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -23,19 +26,27 @@ public class CacheConfig {
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+
         return RedisCacheConfiguration.defaultCacheConfig()
-                .disableCachingNullValues()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
     }
 
     @Bean
     public RedisCacheManager cacheManager() {
-        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.builder(redisConnectionFactory);
+        RedisCacheConfiguration userCacheConfig = cacheConfiguration()
+                .entryTtl(USERS_CACHE_TTL);
 
-        // Configure cache entries with different TTLs
-        builder.withCacheConfiguration("users", cacheConfiguration().entryTtl(USERS_CACHE_TTL));
-        builder.withCacheConfiguration("events", cacheConfiguration().entryTtl(EVENTS_CACHE_TTL));
+        RedisCacheConfiguration eventCacheConfig = cacheConfiguration()
+                .entryTtl(EVENTS_CACHE_TTL);
 
-        return builder.build();
+        return RedisCacheManager.builder(redisConnectionFactory)
+                .withCacheConfiguration("users", userCacheConfig)
+                .withCacheConfiguration("events", eventCacheConfig)
+                .build();
     }
 }
